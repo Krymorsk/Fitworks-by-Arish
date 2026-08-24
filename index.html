@@ -25,6 +25,13 @@
       <div class="sidebar-tip"><span>Show up. Track it. Improve.</span><small>Your data stays in this browser.</small></div>
     </aside>
 
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-mobile-action="home"><span>⌂</span><small>Home</small></button>
+      <button class="mobile-nav-item" data-mobile-action="log"><span>＋</span><small>Log</small></button>
+      <button class="mobile-nav-item" data-mobile-action="progress"><span>↗</span><small>Progress</small></button>
+      <button class="mobile-nav-item" data-mobile-action="more"><span>•••</span><small>More</small></button>
+    </nav>
+
     <main class="main">
       <header class="topbar">
         <div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Dashboard</h1></div>
@@ -64,9 +71,15 @@
           <article class="stat-card"><span class="stat-icon">📏</span><div><span>BMI</span><strong id="bmiValue">—</strong></div><small id="bmiLabel">Add height + weight</small></article>
         </div>
 
-        <article class="card plan-card">
-          <div class="card-heading"><div><p class="eyebrow">YOUR PLAN</p><h3 id="planTitle">Normal day plan</h3></div><span class="mode-chip" id="planMode">NORMAL</span></div>
+        <article class="card plan-card plan-card-v2">
+          <div class="card-heading">
+            <div><p class="eyebrow" id="planEyebrow">TODAY'S PLAN</p><h3 id="planTitle">Normal day plan</h3></div>
+            <span class="mode-chip" id="planMode">NORMAL</span>
+          </div>
+          <div class="plan-status-line"><span class="plan-training-chip" id="planTrainingChip">🤖 AUTO · GUIDED</span><span class="plan-reason" id="planReason">Built from your current data</span></div>
           <div class="plan-grid"><div><span class="plan-label">TRAINING</span><strong id="planWorkout">Full-body strength</strong><p id="planWorkoutText">Balanced push, pull, legs and core work.</p></div><div><span class="plan-label">MEALS</span><strong id="planMeal">Protein at every meal</strong><p id="planMealText">Build meals around protein, vegetables and useful carbs.</p></div><div><span class="plan-label">TODAY'S WIN</span><strong id="planWin">Show up</strong><p id="planWinText">Complete the smallest version of the plan you can sustain.</p></div></div>
+          <div class="auto-plan-preview" id="autoPlanPreview"></div>
+          <div class="plan-actions"><button type="button" class="primary-btn" id="startPlanBtn">▶ Start today's plan</button><button type="button" class="ghost-btn" id="customizePlanBtn">Customize</button></div>
         </article>
 
         <div class="two-col">
@@ -88,7 +101,7 @@
       </section>
 
       <section id="workouts" class="page-section">
-        <div class="section-intro"><div><p class="eyebrow">TRAINING LOG</p><h2>Workouts</h2><p>Build sessions, record sets and compare against your history.</p></div><button class="primary-btn" id="addWorkoutBtn">＋ Add workout</button></div>
+        <div class="section-intro"><div><p class="eyebrow">TRAINING LOG</p><p class="section-desc">Build sessions, record sets and compare against your history.</p></div><button class="primary-btn" id="addWorkoutBtn">＋ Add workout</button></div>
         <div class="stats-grid mini-stats">
           <article class="stat-card"><span class="stat-icon">📅</span><div><span>This week</span><strong id="workoutWeekCount">0</strong></div><small>sessions</small></article>
           <article class="stat-card"><span class="stat-icon">⏱️</span><div><span>This week</span><strong id="workoutWeekTime">0h</strong></div><small>training time</small></article>
@@ -100,7 +113,7 @@
       </section>
 
       <section id="nutrition" class="page-section">
-        <div class="section-intro"><div><p class="eyebrow">FOOD LOG</p><h2>Nutrition</h2><p>Track your intake against the needs of your current fitness mode.</p></div><button class="primary-btn" id="addMealBtn">＋ Add meal</button></div>
+        <div class="section-intro"><div><p class="eyebrow">FOOD LOG</p><p class="section-desc">Track your intake against the needs of your current fitness mode.</p></div><button class="primary-btn" id="addMealBtn">＋ Add meal</button></div>
         <div class="nutrition-overview">
           <div class="nutrition-card"><span>Calories</span><strong id="dayCalories">0</strong><div class="progress-track"><i id="calorieFill"></i></div><small id="calorieTargetText">0 target</small></div>
           <div class="nutrition-card"><span>Protein</span><strong id="dayProtein">0g</strong><div class="progress-track purple"><i id="proteinFill"></i></div><small id="proteinTargetText">0g target</small></div>
@@ -109,65 +122,356 @@
         </div>
         <div id="mealList" class="record-grid"></div>
       </section>
-
       <section id="progress" class="page-section">
-        <div class="section-intro"><div><p class="eyebrow">YOUR TREND</p><h2>Progress</h2><p>See the direction of your body, strength and comeback.</p></div><button class="primary-btn" id="addProgressBtn">＋ Weigh-in</button></div>
-        <div class="analytics-grid">
-          <article class="card analytics-hero"><p class="eyebrow">BODY TRANSFORMATION</p><div class="weight-journey"><div><span>Start</span><strong id="startWeight">—</strong></div><div class="journey-line"><i id="journeyFill"></i><span id="journeyDelta">—</span></div><div class="right-align"><span>Goal</span><strong id="goalWeightView">—</strong></div></div></article>
-          <article class="card"><p class="eyebrow">RECOVERY SCORE</p><strong class="big-number" id="recoveryScore">0</strong><p class="card-subtext" id="recoveryText">Log sleep and steps to improve this score.</p></article>
-          <article class="card"><p class="eyebrow">FITNESS LEVEL</p><strong class="big-number" id="progressLevel">Lv 1</strong><p class="card-subtext" id="progressLevelText">Rebuilding</p></article>
+        <div class="section-intro progress-intro">
+          <div>
+            <p class="eyebrow">YOUR JOURNEY</p>
+            <p class="section-desc">One place to see what's changing, what is improving, and what needs attention.</p>
+          </div>
+          <button class="primary-btn" id="addProgressBtn">＋ Weigh-in</button>
         </div>
-        <div class="card progress-panel"><div class="progress-header"><div><span>Weight trend</span><strong id="progressSummary">No weigh-ins yet</strong></div><select id="progressRange"><option value="all">All time</option><option value="30">30 days</option><option value="90">90 days</option></select></div><canvas id="weightChart"></canvas></div>
-        <div class="two-col">
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">STRENGTH</p><h3>Personal bests</h3></div><button class="text-btn" id="addStrengthBtn">Add</button></div><div id="strengthList" class="list"></div></article>
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">COMEBACK MODE</p><h3>Ability progress</h3></div><span class="badge">adaptive</span></div><div id="comebackList" class="list"></div></article>
+
+        <div class="progress-subnav" aria-label="Progress sections">
+          <button class="progress-tab active" data-progress-target="progressOverview">Overview</button>
+          <button class="progress-tab" data-progress-target="progressStrength">Strength</button>
+          <button class="progress-tab" data-progress-target="progressBody">Body</button>
+          <button class="progress-tab" data-progress-target="progressRecovery">Recovery</button>
         </div>
-        <div class="two-col">
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">MEASUREMENTS</p><h3>Body stats</h3></div><button class="text-btn" id="addMeasurementBtn">Add</button></div><div id="measurementList" class="list"></div></article>
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">RECOVERY</p><h3>Sleep & steps</h3></div><div class="recovery-actions"><button class="soft-btn" id="logSleepBtn">🌙 Sleep</button><button class="soft-btn" id="logStepsBtn">👟 Steps</button></div></div><div id="recoveryList" class="list"></div></article>
+
+        <article id="progressOverview" class="progress-hero-v2">
+          <div class="progress-hero-main">
+            <div>
+              <div class="progress-mode-line"><span id="progressModePill">NORMAL</span><span>•</span><span id="progressHeroStatus">Build consistency</span></div>
+              <p class="eyebrow light">YOUR CURRENT PHASE</p>
+              <h3 id="progressHeroTitle">Your progress starts with one check-in.</h3>
+              <p id="progressHeroText">Log a few useful numbers and FORM will turn them into a clear story.</p>
+              <div class="progress-hero-actions-v2">
+                <button class="hero-action light" id="progressHeroLogBtn">＋ Log progress</button>
+                <button class="hero-action dark" id="progressHeroStrengthBtn">＋ Add PR</button>
+              </div>
+            </div>
+            <div class="progress-score-orb">
+              <div class="score-orb-ring"><div><strong id="progressMomentumScore">0</strong><span>/ 100</span></div></div>
+              <small>momentum</small>
+            </div>
+          </div>
+          <div class="progress-hero-footer">
+            <div class="progress-hero-statline"><span>Fitness level</span><strong id="progressHeroLevel">Lv 1 · Rebuilding</strong></div>
+            <div class="progress-hero-statline"><span>Current weight</span><strong id="progressCurrentWeight">—</strong></div>
+            <div class="progress-hero-statline"><span>Recovery</span><strong id="progressHeroRecovery">0%</strong></div>
+          </div>
+        </article>
+
+        <div class="progress-kpis">
+          <article class="progress-kpi kpi-blue"><div class="kpi-icon">⚖️</div><div><span>Weight</span><strong id="progressWeightNow">—</strong><small id="progressWeightDelta">No trend yet</small></div></article>
+          <article class="progress-kpi kpi-purple"><div class="kpi-icon">↗</div><div><span>Fitness level</span><strong id="progressLevel">Lv 1</strong><small id="progressLevelText">Rebuilding · 0/100</small></div></article>
+          <article class="progress-kpi kpi-mint"><div class="kpi-icon">♥</div><div><span>Recovery</span><strong id="recoveryScore">0%</strong><small id="recoveryText">Add sleep + steps</small></div></article>
+          <article class="progress-kpi kpi-peach"><div class="kpi-icon">🏋️</div><div><span>Training</span><strong id="progressWorkoutCount">0</strong><small>sessions this month</small></div></article>
+        </div>
+
+        <article id="progressBody" class="progress-block body-journey-v2">
+          <div class="block-head">
+            <div><p class="eyebrow">BODY TRANSFORMATION</p><h3>Start → current → goal</h3></div>
+            <span class="status-pill" id="journeyStatus">Set a goal</span>
+          </div>
+          <div class="weight-journey-v2">
+            <div class="journey-point"><span>START</span><strong id="startWeight">—</strong><small>First weigh-in</small></div>
+            <div class="journey-track-wrap">
+              <div class="journey-current-label"><span>CURRENT</span><strong id="progressJourneyCurrent">—</strong></div>
+              <div class="journey-track"><i id="journeyFill"></i></div>
+              <div class="journey-message" id="journeyDelta">Add 2+ weigh-ins to measure change.</div>
+            </div>
+            <div class="journey-point align-right"><span>GOAL</span><strong id="goalWeightView">—</strong><small>Target weight</small></div>
+          </div>
+        </article>
+
+        <article id="progressOverviewTrend" class="progress-block trend-block">
+          <div class="block-head">
+            <div><p class="eyebrow">BODY TREND</p><h3>Weight history</h3><strong id="progressSummary">No weigh-ins yet</strong></div>
+            <select id="progressRange"><option value="all">All time</option><option value="30">30 days</option><option value="90">90 days</option></select>
+          </div>
+          <div class="chart-shell">
+            <div class="chart-empty-state" id="chartEmptyState"><div class="empty-orb">↗</div><strong>Give your chart a starting point.</strong><span>Add two or more weigh-ins and the trend will appear here.</span><button class="text-btn" id="chartEmptyBtn">＋ Add weigh-in</button></div>
+            <canvas id="weightChart"></canvas>
+          </div>
+        </article>
+
+        <div id="progressStrength" class="progress-section-grid">
+          <article class="progress-block strength-panel">
+            <div class="block-head">
+              <div><p class="eyebrow">STRENGTH</p><h3>Personal bests</h3><span class="block-sub">Your latest breakthroughs.</span></div>
+              <button class="text-btn" id="addStrengthBtn">＋ Add PR</button>
+            </div>
+            <div id="strengthList" class="progress-list"></div>
+          </article>
+
+          <article class="progress-block comeback-panel">
+            <div class="block-head">
+              <div><p class="eyebrow">COMEBACK</p><h3>Ability progress</h3><span class="block-sub">Benchmarks that matter for rebuilding.</span></div>
+              <span class="status-pill">adaptive</span>
+            </div>
+            <div id="comebackList" class="progress-list"></div>
+          </article>
+        </div>
+
+        <div id="progressRecovery" class="progress-section-grid">
+          <article class="progress-block recovery-panel">
+            <div class="block-head">
+              <div><p class="eyebrow">RECOVERY</p><h3>Sleep & activity</h3><span class="block-sub">Recovery supports every goal.</span></div>
+              <div class="recovery-actions"><button class="soft-btn" id="logSleepBtn">🌙 Sleep</button><button class="soft-btn" id="logStepsBtn">👟 Steps</button></div>
+            </div>
+            <div id="recoveryList" class="progress-list"></div>
+          </article>
+
+          <article class="progress-block measurements-panel">
+            <div class="block-head">
+              <div><p class="eyebrow">MEASUREMENTS</p><h3>Body stats</h3><span class="block-sub">Track changes beyond the scale.</span></div>
+              <button class="text-btn" id="addMeasurementBtn">＋ Add</button>
+            </div>
+            <div id="measurementList" class="progress-list"></div>
+          </article>
         </div>
       </section>
 
       <section id="goals" class="page-section">
-        <div class="section-intro"><div><p class="eyebrow">MILESTONES</p><h2>Goals</h2><p>Turn your training into visible wins.</p></div><button class="primary-btn" id="addGoalBtn">＋ Add goal</button></div>
+        <div class="section-intro"><div><p class="eyebrow">MILESTONES</p><p class="section-desc">Turn your training into visible wins.</p></div><button class="primary-btn" id="addGoalBtn">＋ Add goal</button></div>
         <div class="goals-highlight"><div><p class="eyebrow light">MODE GOAL</p><h3 id="goalModeTitle">Improve overall fitness</h3><p id="goalModeText">Normal mode focuses on balanced strength, consistency and health.</p></div><div class="goal-orb">🎯</div></div>
         <div id="goalList" class="goal-grid"></div>
       </section>
-
       <section id="settings" class="page-section">
-        <div class="section-intro"><div><p class="eyebrow">PREFERENCES</p><h2>Settings</h2><p>Your mode controls recommendations — not your history.</p></div></div>
-        <div class="settings-grid">
-          <article class="card settings-main"><div class="card-heading"><div><p class="eyebrow">FITNESS MODE</p><h3>Choose your current phase</h3></div><span class="badge">default: Normal</span></div>
-            <div class="mode-options" id="modeOptions"></div>
-            <div class="setting-callout"><strong>Important</strong><span>Switching modes changes your planning targets and recommendations. Your workouts, meals, weigh-ins and goals stay untouched.</span></div>
-          </article>
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">PROFILE</p><h3>Body & targets</h3></div></div>
-            <form id="profileForm" class="form-grid">
-              <label>Name<input id="profileName" type="text" placeholder="Your name"></label>
-              <label>Height (cm)<input id="profileHeight" type="number" min="80" max="250" step="0.1" placeholder="180"></label>
-              <label>Current weight (kg)<input id="profileWeight" type="number" min="20" max="300" step="0.1" placeholder="90"></label>
-              <label>Goal weight (kg)<input id="profileGoalWeight" type="number" min="20" max="300" step="0.1" placeholder="80"></label>
-              <label>Daily calories<input id="profileCalories" type="number" min="500" max="10000" step="50" placeholder="2200"></label>
-              <label>Daily protein (g)<input id="profileProtein" type="number" min="0" max="500" step="1" placeholder="150"></label>
-              <label>Water target (glasses)<input id="profileWater" type="number" min="1" max="30" step="1" placeholder="8"></label>
-              <label>Daily steps<input id="profileSteps" type="number" min="1000" max="50000" step="500" placeholder="8000"></label>
-              <label>Weekly gym target<input id="profileGymTarget" type="number" min="1" max="14" step="1" placeholder="3"></label>
-              <div class="form-actions"><button class="primary-btn" type="submit">Save profile</button></div>
-            </form>
-          </article>
+        <div class="section-intro settings-intro">
+          <div>
+            <p class="eyebrow">PERSONALIZE FORM</p>
+            <p class="section-desc">Choose how FORM should guide you. Your history always stays yours.</p>
+          </div>
         </div>
-        <div class="two-col">
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">DATA</p><h3>Backup & restore</h3></div></div><p class="card-subtext">Export your FORM data to a JSON file, or import a previous backup.</p><div class="settings-actions"><button class="ghost-btn" id="exportBtn">Export data</button><label class="file-btn">Import data<input id="importInput" type="file" accept="application/json" hidden></label><button class="danger-btn" id="resetDataBtn">Reset all data</button></div></article>
-          <article class="card"><div class="card-heading"><div><p class="eyebrow">ABOUT LEVELS</p><h3>How FORM estimates level</h3></div></div><p class="card-subtext">The level is a <strong>custom app heuristic</strong>, not a medical or scientific ranking. It uses performance benchmarks, consistency and BMI as a small body-composition context signal. Exercise performance has the biggest weight.</p><div class="level-scale"><span>1–2 Rebuilding</span><span>3–4 Beginner</span><span>5–6 Developing</span><span>7–8 Advanced</span><span>9–10 Elite</span></div></article>
+
+        <article class="settings-hero">
+          <div class="settings-hero-copy">
+            <div class="settings-current-line"><span class="settings-mode-dot" id="settingsModeDot"></span><span id="settingsModeName">NORMAL MODE</span><span>•</span><span id="settingsModeGoal">Build consistency</span></div>
+            <p class="eyebrow light">YOUR CURRENT PLAN</p>
+            <h3 id="settingsHeroTitle">A balanced plan built around consistency.</h3>
+            <p id="settingsHeroText">Switch your mode whenever your training phase changes. Your workouts and history never get erased.</p>
+          </div>
+          <div class="settings-hero-badge"><span>MODE</span><strong id="settingsHeroMode">Normal</strong></div>
+        </article>
+
+        <article class="settings-panel mode-panel">
+          <div class="settings-panel-head">
+            <div>
+              <p class="eyebrow">FITNESS MODE</p>
+              <h3>Choose your current phase</h3>
+              <span>FORM adapts training and nutrition recommendations to this choice.</span>
+            </div>
+            <span class="soft-badge">Default: Normal</span>
+          </div>
+          <div class="mode-options mode-options-v2" id="modeOptions">
+  <button class="mode-option normal-mode" data-mode="normal" type="button">
+    <div class="mode-icon">⚪</div>
+    <strong>Normal</strong>
+    <small>Balanced fitness, strength and health.</small>
+    <span class="mode-check">✓</span>
+  </button>
+  <button class="mode-option bulk-mode" data-mode="bulk" type="button">
+    <div class="mode-icon">🟠</div>
+    <strong>Bulk</strong>
+    <small>Build muscle, size and strength.</small>
+    <span class="mode-check">✓</span>
+  </button>
+  <button class="mode-option comeback-mode" data-mode="comeback" type="button">
+    <div class="mode-icon">🟣</div>
+    <strong>Comeback</strong>
+    <small>Rebuild strength and conditioning.</small>
+    <span class="mode-check">✓</span>
+  </button>
+</div>
+          <div class="mode-preview">
+            <div><span>Training focus</span><strong id="settingsModeFocus">Balanced strength + healthy habits</strong></div>
+            <div><span>Weekly sessions</span><strong id="settingsModeSessions">3 sessions</strong></div>
+            <div><span>Protein guide</span><strong id="settingsModeProtein">~1.6 g/kg</strong></div>
+          </div>
+          <div class="setting-callout">
+            <span class="callout-icon">i</span>
+            <div><strong>Your history is safe</strong><span>Changing modes only changes recommendations and targets. Workouts, meals, weigh-ins, PRs and goals stay untouched.</span></div>
+          </div>
+        </article>
+
+        
+        <article class="settings-panel training-preference-panel">
+          <div class="settings-panel-head">
+            <div>
+              <p class="eyebrow">TRAINING PREFERENCE</p>
+              <h3>How should FORM help you train?</h3>
+              <span>Fitness Mode is your goal. Training Mode controls how much FORM decides for you.</span>
+            </div>
+            <span class="soft-badge" id="settingsTrainingBadge">AUTO</span>
+          </div>
+
+          <div class="training-mode-options" id="trainingModeOptions">
+            <button type="button" class="training-mode-card" data-training-mode="auto">
+              <div class="training-mode-icon">🤖</div>
+              <div><strong>Auto</strong><small>FORM plans your session from your mode, recent workouts, recovery and progress.</small></div>
+              <span class="training-check">✓</span>
+            </button>
+            <button type="button" class="training-mode-card" data-training-mode="manual">
+              <div class="training-mode-icon">✍️</div>
+              <div><strong>Manual</strong><small>You choose every exercise and log everything yourself. FORM still analyzes it.</small></div>
+              <span class="training-check">✓</span>
+            </button>
+          </div>
+
+          <div class="auto-style-panel" id="autoStylePanel">
+            <div class="auto-style-copy">
+              <p class="eyebrow">AUTO PLANNING</p>
+              <strong>How much control do you want?</strong>
+              <span>Guided keeps you in the driver's seat. Automatic starts you from the generated plan.</span>
+            </div>
+            <div class="auto-style-options" id="autoStyleOptions">
+              <button type="button" class="auto-style-card" data-auto-style="guided"><span>🧭</span><div><strong>Guided</strong><small>Review the plan, then start it.</small></div></button>
+              <button type="button" class="auto-style-card" data-auto-style="automatic"><span>⚡</span><div><strong>Automatic</strong><small>Start directly from today's plan.</small></div></button>
+            </div>
+          </div>
+
+          <div class="training-engine-summary" id="trainingEngineSummary">
+            <span class="engine-dot"></span><div><strong>Adaptive planning is ready.</strong><small>FORM will consider your day, recent training, recovery, mode and recent performance.</small></div>
+          </div>
+        </article>
+
+<form id="profileForm" class="settings-form">
+          <article class="settings-panel">
+            <div class="settings-panel-head">
+              <div><p class="eyebrow">PROFILE</p><h3>Body basics</h3><span>These numbers power BMI and body-progress calculations.</span></div>
+            </div>
+            <div class="settings-fields settings-fields-two">
+              <label class="settings-field full-field">Name<input id="profileName" type="text" placeholder="Your name"></label>
+              <label class="settings-field">Height<input id="profileHeight" type="number" min="80" max="250" step="0.1" placeholder="180"><small>cm</small></label>
+              <label class="settings-field">Current weight<input id="profileWeight" type="number" min="20" max="300" step="0.1" placeholder="90"><small>kg</small></label>
+              <label class="settings-field">Goal weight<input id="profileGoalWeight" type="number" min="20" max="300" step="0.1" placeholder="80"><small>kg</small></label>
+            </div>
+          </article>
+
+          <article class="settings-panel">
+            <div class="settings-panel-head">
+              <div><p class="eyebrow">DAILY TARGETS</p><h3>Set your numbers</h3><span>These are your preferred targets; FORM can still show mode-based guidance.</span></div>
+            </div>
+            <div class="settings-fields settings-fields-two">
+              <label class="settings-field">Calories<input id="profileCalories" type="number" min="500" max="10000" step="50" placeholder="2200"><small>kcal/day</small></label>
+              <label class="settings-field">Protein<input id="profileProtein" type="number" min="0" max="500" step="1" placeholder="150"><small>g/day</small></label>
+              <label class="settings-field">Water<input id="profileWater" type="number" min="1" max="30" step="1" placeholder="8"><small>glasses/day</small></label>
+              <label class="settings-field">Steps<input id="profileSteps" type="number" min="1000" max="50000" step="500" placeholder="8000"><small>steps/day</small></label>
+              <label class="settings-field">Gym target<input id="profileGymTarget" type="number" min="1" max="14" step="1" placeholder="3"><small>sessions/week</small></label>
+            </div>
+            <div class="settings-form-actions">
+              <button class="primary-btn" type="submit">Save changes</button>
+              <span id="settingsSaveHint">Your settings are stored on this device.</span>
+            </div>
+          </article>
+        </form>
+
+        <div class="settings-grid-v2">
+          <article class="settings-panel compact-settings-panel">
+            <div class="settings-panel-head">
+              <div><p class="eyebrow">DATA</p><h3>Backup & restore</h3><span>Keep a portable backup of your FORM data.</span></div>
+            </div>
+            <div class="settings-action-grid">
+              <button class="setting-action" id="exportBtn"><span>↗</span><div><strong>Export</strong><small>Save JSON backup</small></div></button>
+              <label class="setting-action" for="importInput"><span>↙</span><div><strong>Import</strong><small>Restore JSON backup</small></div><input id="importInput" type="file" accept="application/json" hidden></label>
+              <button class="setting-action danger" id="resetDataBtn"><span>×</span><div><strong>Reset</strong><small>Erase all local data</small></div></button>
+            </div>
+          </article>
+
+          <article class="settings-panel compact-settings-panel">
+            <div class="settings-panel-head">
+              <div><p class="eyebrow">FITNESS LEVEL</p><h3>How FORM estimates level</h3><span>A practical app heuristic — not a medical or scientific ranking.</span></div>
+            </div>
+            <div class="level-ramp">
+              <div><i></i><i></i><i></i><i></i><i></i>
+              <div class="level-ramp-labels"><span>Rebuilding</span><span>Beginner</span><span>Developing</span><span>Advanced</span><span>Elite</span></div>
+            </div>
+            <div class="level-explain">
+              <span>🏋️ Performance has the biggest weight.</span>
+              <span>🔥 Consistency matters.</span>
+              <span>⚖️ BMI is only a small context signal.</span>
+            </div>
+          </article>
         </div>
       </section>
+
     </main>
   </div>
 
   <!-- Workout modal -->
+  <dialog id="mobileLogDialog" class="sheet-dialog">
+    <div class="sheet-form">
+      <div class="modal-head"><div><p class="eyebrow">QUICK LOG</p><h3>What do you want to record?</h3></div><button type="button" class="icon-btn" data-mobile-close>×</button></div>
+      <div class="mobile-action-grid">
+        <button class="mobile-action-card" data-log-target="workout"><span>🏋️</span><strong>Workout</strong><small>Sets, reps & weight</small></button>
+        <button class="mobile-action-card" data-log-target="meal"><span>🍽️</span><strong>Meal</strong><small>Calories & protein</small></button>
+        <button class="mobile-action-card" data-log-target="weight"><span>⚖️</span><strong>Weight</strong><small>Track bodyweight</small></button>
+        <button class="mobile-action-card" data-log-target="sleep"><span>🌙</span><strong>Sleep</strong><small>Hours & quality</small></button>
+        <button class="mobile-action-card" data-log-target="steps"><span>👟</span><strong>Steps</strong><small>Daily movement</small></button>
+        <button class="mobile-action-card" data-log-target="measurement"><span>📏</span><strong>Measurement</strong><small>Body stats</small></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="mobileMoreDialog" class="sheet-dialog">
+    <div class="sheet-form">
+      <div class="modal-head"><div><p class="eyebrow">MORE</p><h3>Explore FORM</h3></div><button type="button" class="icon-btn" data-mobile-close>×</button></div>
+      <div class="mobile-more-list">
+        <button class="mobile-more-row" data-more-target="nutrition"><span>🍽️</span><div><strong>Nutrition</strong><small>Meals, calories, protein & water</small></div><b>›</b></button>
+        <button class="mobile-more-row" data-more-target="goals"><span>🏆</span><div><strong>Goals</strong><small>Milestones and targets</small></div><b>›</b></button>
+        <button class="mobile-more-row" data-more-target="settings"><span>⚙️</span><div><strong>Settings</strong><small>Mode, profile, targets & data</small></div><b>›</b></button>
+      </div>
+      <p class="sheet-note">All your advanced features are still here — they’re just tucked away until you need them.</p>
+    </div>
+  </dialog>
+
+
+  <dialog id="exercisePickerModal" class="exercise-picker-dialog">
+    <div class="exercise-picker-shell">
+      <div class="exercise-picker-head">
+        <div>
+          <p class="eyebrow">EXERCISE LIBRARY</p>
+          <h3>Choose an exercise</h3>
+          <p>Search, filter, favourite your regulars, then add them in one tap.</p>
+        </div>
+        <button type="button" class="icon-btn" data-close>×</button>
+      </div>
+
+      <div class="exercise-search-wrap">
+        <span>⌕</span><input id="exerciseSearch" type="search" placeholder="Search exercise, machine or muscle..." autocomplete="off">
+      </div>
+
+      <div class="exercise-filter-row" id="exerciseFilterRow">
+        <button type="button" class="exercise-filter active" data-ex-filter="All">All</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Favorites">★ Favorites</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Chest">Chest</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Back">Back</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Shoulders">Shoulders</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Arms">Arms</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Legs">Legs</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Core">Core</button>
+        <button type="button" class="exercise-filter" data-ex-filter="Cardio">Cardio</button>
+      </div>
+
+      <div class="exercise-picker-meta">
+        <div><span class="eyebrow">QUICK PICKS</span><strong id="exerciseQuickLabel">Your favourites</strong></div>
+        <button type="button" class="text-btn" id="exerciseClearSearch">Clear</button>
+      </div>
+      <div id="exerciseQuickPicks" class="exercise-quick-picks"></div>
+
+      <div class="exercise-picker-meta library-meta">
+        <div><span class="eyebrow">LIBRARY</span><strong id="exerciseResultCount">0 exercises</strong></div>
+        <span class="exercise-mode-note" id="exerciseModeNote">Normal mode</span>
+      </div>
+      <div id="exerciseLibraryGrid" class="exercise-library-grid"></div>
+    </div>
+  </dialog>
+
   <dialog id="workoutModal"><form method="dialog" id="workoutForm" class="modal-form"><div class="modal-head"><h3>Build workout</h3><button type="button" class="icon-btn" data-close>×</button></div>
     <div class="form-grid"><label>Date<input id="workoutDate" type="date" required></label><label>Type<select id="workoutType"><option value="gym">Gym</option><option value="home">Home</option><option value="cardio">Cardio</option></select></label><label>Duration (minutes)<input id="workoutDuration" type="number" min="1" max="600" required></label><label>Intensity (RPE 1–10)<input id="workoutIntensity" type="number" min="1" max="10" step="1" placeholder="7"></label><label>Location / gym<input id="workoutLocation" type="text" placeholder="e.g. Gold's Gym"></label></div>
-    <div class="exercise-builder"><div class="builder-head"><div><p class="eyebrow">EXERCISES</p><h4>Add sets to this workout</h4></div><button type="button" class="soft-btn" id="addExerciseRowBtn">＋ Exercise</button></div><div id="exerciseRows"></div></div>
+    <div class="exercise-builder"><div class="builder-head"><div><p class="eyebrow">EXERCISES</p><h4>Add sets to this workout</h4></div><button type="button" class="soft-btn add-library-btn" id="addExerciseRowBtn">＋ Exercise library</button></div><div id="workoutFavoriteStrip" class="workout-favorite-strip"></div><div id="exerciseRows"></div></div>
     <label class="full modal-label">Notes<textarea id="workoutNotes" rows="2" placeholder="Energy, form, technique, anything worth remembering..."></textarea></label>
     <div class="modal-actions"><button type="button" class="ghost-btn" data-close>Cancel</button><button class="primary-btn">Save workout</button></div>
   </form></dialog>
