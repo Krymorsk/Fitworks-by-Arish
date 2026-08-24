@@ -1,22 +1,28 @@
-# FORM — Exercise Tracker
+# FORM — Fitness OS
 
-A stylish, offline-first personal fitness dashboard built with vanilla HTML, CSS and JavaScript.
+A stylish, offline-first personal fitness tracker built with vanilla HTML, CSS and JavaScript.
 
-## Included
-- Dashboard with weekly goal score, streaks and daily focus
-- Workout / gym / home / cardio logs with duration, location, exercises and RPE
-- Nutrition logs with calories, protein and water targets
-- Weight history and trend chart
-- BMI calculator
-- Personal bests and comeback tracking (push-ups, L-sit, pulling strength)
-- Sleep and daily-step tracking
-- Waist / chest / arm / thigh measurements
-- Goal / milestone tracker
-- Local progress photos stored in the browser
-- Responsive desktop + mobile UI with colorful styling
-- LocalStorage persistence and legacy V1/V2 migration
+## Core system
+- Default fitness mode: Normal
+- Modes: Normal / Bulk / Comeback
+- Mode changes recommendations and targets, but never deletes history
+- Custom Fitness Level heuristic shown on the dashboard
+- Fitness Level uses exercise performance + consistency as primary inputs, with BMI used only as a small body-composition context signal
+
+## Tracking
+- Workout builder with exercise, sets, reps, weight and rest
+- RPE / intensity and notes
+- Exercise history and personal bests
+- Nutrition: calories, protein, water, meals
+- Weight, BMI and body measurements
+- Sleep and steps
+- Goals and milestones
+- Weight trend chart
+- Recovery score
+- Comeback benchmarks
+- Export / import JSON backup
+- LocalStorage persistence
+- Responsive desktop + mobile UI
 
 ## Run
-Open `index.html` with Live Server or any local web server.
-
-No backend or external dependencies are required.
+Open `index.html` with Live Server (or any static HTTP server).

@@ -1,41 +1,25 @@
-# FORM Exercise Tracker — QA Report
+# FORM QA Report
 
-Date: 24 Aug 2026
+## Checks completed
+- JavaScript syntax: PASS (`node --check script.js`)
+- HTML element references used by JavaScript: PASS (no missing direct IDs)
+- Core render functions: one definition each
+- Core form handlers: connected for workouts, meals, weigh-ins, strength, sleep, steps, measurements, goals and profile
+- LocalStorage persistence path: connected
+- Legacy migration path: V1/V2/V3 -> V4 schema
+- Mode system: Normal default + Bulk + Comeback in Settings
+- Mode history behavior: mode changes update planning/targets without deleting records
+- Fitness level heuristic: connected to dashboard and progress
+- Workout builder: exercise rows -> structured workout records -> workout history
+- Nutrition aggregation: calories/protein/water daily totals -> target progress
+- Weight history: sorted records -> trend chart + start/current/goal journey
+- Recovery: sleep + steps -> recovery score
+- Goals: create -> progress -> complete/reopen -> delete
+- Data backup: JSON export/import/reset paths connected
+- Responsive layout: desktop/mobile media rules present
 
-## Static / integration checks
-- JavaScript syntax check: PASS (`node --check script.js`)
-- Every direct JS `$()` DOM id reference exists in `index.html`: PASS (0 missing)
-- Core render functions are unique: PASS
-- Workout / meal / weigh-in / strength / sleep / steps / measurement / goal / photo forms exist and have submit handlers: PASS
-- Dashboard, Workouts, Nutrition, Progress and Profile navigation targets exist: PASS
-- LocalStorage data schema is normalized and includes migration from V1/V2: PASS
-- Structured exercise builder is connected to workout saving and progress rendering: PASS
-- Goal completion toggles and deletion are connected: PASS
-- Progress photo FileReader flow is connected to local storage and gallery rendering: PASS
-- BMI, weight trend, weekly activity, streak, nutrition aggregation and target calculations are wired: PASS
+## Browser runtime note
+A real headless Chromium click-through was attempted in the execution environment, but local/file/HTTP navigation is blocked by the environment's administrator policy. Therefore browser-level runtime validation could not be completed here. Static, syntax, reference and wiring checks were completed instead.
 
-## Browser launch check
-A Chromium headless launch was attempted against the app through a local HTTP server. The environment did not return a usable headless DOM/screenshot before timeout, so an interactive click-through browser test is **not** claimed as complete here. This is an environment limitation, not a reported application error.
-
-## Manual smoke test to run in VS Code
-1. Open `index.html` with Live Server.
-2. Set height/weight/goal in Profile and save.
-3. Add a workout and at least one structured exercise (sets/reps/kg).
-4. Add a meal, sleep record and step count.
-5. Add two weigh-ins and open Progress.
-6. Add a milestone and a progress photo.
-7. Refresh the browser and confirm all data remains.
-
-## Main features added
-- More colorful / premium visual system
-- Mobile bottom navigation
-- Weekly training target and streaks
-- Structured exercise entries (sets/reps/weight)
-- Exercise performance summary
-- Calorie / protein / water target insights
-- Sleep + steps tracking
-- Body measurements
-- Milestones / goals
-- Local progress photos
-- Comeback Mode for push-ups, L-sit and pulling strength
-- Daily training check-in
+## Fitness level note
+FORM's level is an app-specific heuristic, not a medical or scientific strength classification. Exercise performance and consistency carry most of the score; BMI is used only as a small body-composition context signal. This avoids treating BMI as a direct measure of muscular strength.
