@@ -6,6 +6,9 @@
   <meta name="theme-color" content="#111827" />
   <title>FORM — Fitness OS</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" />
+  <meta name="theme-color" content="#14161b" />
 </head>
 <body>
   <div class="app-shell">
@@ -64,7 +67,7 @@
           <div class="quick-pill peach"><span>🥩</span><div><small>Protein today</small><strong id="dashProtein">0g</strong></div></div>
         </div>
 
-        <div class="stats-grid">
+        <div class="water-quickbar"><div><p class="eyebrow">WATER TODAY</p><strong id="dashboardWaterCount">0 / 8 glasses</strong><small id="dashboardWaterHint">Tap + to log quickly.</small></div><div class="water-actions"><button type="button" class="water-btn" data-water-delta="-1" aria-label="Remove a glass">−</button><span class="water-drop">💧</span><button type="button" class="water-btn primary" data-water-delta="1">＋ Glass</button></div></div><div class="stats-grid">
           <article class="stat-card"><span class="stat-icon">🏋️</span><div><span>Gym visits</span><strong id="gymVisits">0</strong></div><small>this month</small></article>
           <article class="stat-card"><span class="stat-icon">⏱</span><div><span>Gym time</span><strong id="gymTime">0h</strong></div><small>this month</small></article>
           <article class="stat-card"><span class="stat-icon">⚖️</span><div><span>Weight</span><strong id="currentWeight">—</strong></div><small id="weightChange">Set your weight</small></article>
@@ -79,7 +82,7 @@
           <div class="plan-status-line"><span class="plan-training-chip" id="planTrainingChip">🤖 AUTO · GUIDED</span><span class="plan-reason" id="planReason">Built from your current data</span></div>
           <div class="plan-grid"><div><span class="plan-label">TRAINING</span><strong id="planWorkout">Full-body strength</strong><p id="planWorkoutText">Balanced push, pull, legs and core work.</p></div><div><span class="plan-label">MEALS</span><strong id="planMeal">Protein at every meal</strong><p id="planMealText">Build meals around protein, vegetables and useful carbs.</p></div><div><span class="plan-label">TODAY'S WIN</span><strong id="planWin">Show up</strong><p id="planWinText">Complete the smallest version of the plan you can sustain.</p></div></div>
           <div class="auto-plan-preview" id="autoPlanPreview"></div>
-          <div class="plan-actions"><button type="button" class="primary-btn" id="startPlanBtn">▶ Start today's plan</button><button type="button" class="ghost-btn" id="customizePlanBtn">Customize</button></div>
+          <div class="plan-actions"><button type="button" class="primary-btn" id="startPlanBtn">▶ Start today's plan</button><button type="button" class="ghost-btn" id="customizePlanBtn">Customize</button><button type="button" class="text-btn" id="markRestPlanBtn">Mark rest day</button></div>
         </article>
 
         <div class="two-col">
@@ -228,7 +231,7 @@
               <div><p class="eyebrow">MEASUREMENTS</p><h3>Body stats</h3><span class="block-sub">Track changes beyond the scale.</span></div>
               <button class="text-btn" id="addMeasurementBtn">＋ Add</button>
             </div>
-            <div id="measurementList" class="progress-list"></div>
+            <div class="progress-extra-grid"><article class="progress-block"><div class="block-head"><div><p class="eyebrow">TRAINING LOAD</p><h3>Weekly volume</h3><span class="block-sub">Sets × reps × load.</span></div></div><canvas id="volumeChart" height="170"></canvas></article><article class="progress-block"><div class="block-head"><div><p class="eyebrow">BODY TREND</p><h3>Measurement trend</h3><span class="block-sub">Waist trend over recent check-ins.</span></div></div><canvas id="measurementChart" height="170"></canvas></article></div><div id="measurementList" class="progress-list"></div>
           </article>
         </div>
       </section>
@@ -337,7 +340,8 @@
           </div>
         </article>
 
-<form id="profileForm" class="settings-form">
+<article class="settings-panel"><div class="settings-panel-head"><div><p class="eyebrow">APPEARANCE & UNITS</p><h3>Display</h3><span>Choose theme and measurement units.</span></div></div><div class="appearance-grid"><label class="settings-field">Theme<select id="themeSelect"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label><label class="settings-field">Units<select id="unitSystemSelect"><option value="metric">Metric · kg / cm</option><option value="imperial">Imperial · lb / in</option></select></label></div></article>
+        <form id="profileForm" class="settings-form">
           <article class="settings-panel">
             <div class="settings-panel-head">
               <div><p class="eyebrow">PROFILE</p><h3>Body basics</h3><span>These numbers power BMI and body-progress calculations.</span></div>
@@ -357,7 +361,7 @@
             <div class="settings-fields settings-fields-two">
               <label class="settings-field">Calories<input id="profileCalories" type="number" min="500" max="10000" step="50" placeholder="2200"><small>kcal/day</small></label>
               <label class="settings-field">Protein<input id="profileProtein" type="number" min="0" max="500" step="1" placeholder="150"><small>g/day</small></label>
-              <label class="settings-field">Water<input id="profileWater" type="number" min="1" max="30" step="1" placeholder="8"><small>glasses/day</small></label>
+              <label class="settings-field">Carbs<input id="profileCarbs" type="number" min="0" step="1" placeholder="240"><small>g/day</small></label><label class="settings-field">Fat<input id="profileFat" type="number" min="0" step="1" placeholder="70"><small>g/day</small></label><label class="settings-field">Water<input id="profileWater" type="number" min="1" max="30" step="1" placeholder="8"><small>glasses/day</small></label>
               <label class="settings-field">Steps<input id="profileSteps" type="number" min="1000" max="50000" step="500" placeholder="8000"><small>steps/day</small></label>
               <label class="settings-field">Gym target<input id="profileGymTarget" type="number" min="1" max="14" step="1" placeholder="3"><small>sessions/week</small></label>
             </div>
@@ -472,11 +476,11 @@
   <dialog id="workoutModal"><form method="dialog" id="workoutForm" class="modal-form"><div class="modal-head"><h3>Build workout</h3><button type="button" class="icon-btn" data-close>×</button></div>
     <div class="form-grid"><label>Date<input id="workoutDate" type="date" required></label><label>Type<select id="workoutType"><option value="gym">Gym</option><option value="home">Home</option><option value="cardio">Cardio</option></select></label><label>Duration (minutes)<input id="workoutDuration" type="number" min="1" max="600" required></label><label>Intensity (RPE 1–10)<input id="workoutIntensity" type="number" min="1" max="10" step="1" placeholder="7"></label><label>Location / gym<input id="workoutLocation" type="text" placeholder="e.g. Gold's Gym"></label></div>
     <div class="exercise-builder"><div class="builder-head"><div><p class="eyebrow">EXERCISES</p><h4>Add sets to this workout</h4></div><button type="button" class="soft-btn add-library-btn" id="addExerciseRowBtn">＋ Exercise library</button></div><div id="workoutFavoriteStrip" class="workout-favorite-strip"></div><div id="exerciseRows"></div></div>
-    <label class="full modal-label">Notes<textarea id="workoutNotes" rows="2" placeholder="Energy, form, technique, anything worth remembering..."></textarea></label>
+    <div class="rest-timer-bar"><div><p class="eyebrow">REST TIMER</p><strong id="restTimer">00:00</strong></div><div class="rest-timer-actions"><button type="button" class="soft-btn" data-rest-start="60">60s</button><button type="button" class="soft-btn" data-rest-start="90">90s</button></div></div><label class="full modal-label">Notes<textarea id="workoutNotes" rows="2" placeholder="Energy, form, technique, anything worth remembering..."></textarea></label>
     <div class="modal-actions"><button type="button" class="ghost-btn" data-close>Cancel</button><button class="primary-btn">Save workout</button></div>
   </form></dialog>
 
-  <dialog id="mealModal"><form method="dialog" id="mealForm" class="modal-form"><div class="modal-head"><h3>Log meal</h3><button type="button" class="icon-btn" data-close>×</button></div><div class="form-grid"><label>Date<input id="mealDate" type="date" required></label><label>Meal<select id="mealType"><option>Breakfast</option><option>Lunch</option><option>Snack</option><option>Dinner</option></select></label><label>Calories<input id="mealCalories" type="number" min="0" step="1" placeholder="600"></label><label>Protein (g)<input id="mealProtein" type="number" min="0" step="1" placeholder="35"></label><label>Water (glasses)<input id="mealWater" type="number" min="0" step="1" placeholder="1"></label><label class="full">What did you eat?<textarea id="mealFood" rows="3" placeholder="Rice, chicken, vegetables..."></textarea></label></div><div class="modal-actions"><button type="button" class="ghost-btn" data-close>Cancel</button><button class="primary-btn">Save meal</button></div></form></dialog>
+  <dialog id="mealModal"><form method="dialog" id="mealForm" class="modal-form"><div class="modal-head"><h3>Log meal</h3><button type="button" class="icon-btn" data-close>×</button></div><div class="form-grid"><label>Date<input id="mealDate" type="date" required></label><label>Meal<select id="mealType"><option>Breakfast</option><option>Lunch</option><option>Snack</option><option>Dinner</option></select></label><label>Calories<input id="mealCalories" type="number" min="0" step="1" placeholder="600"></label><label>Protein (g)<input id="mealProtein" type="number" min="0" step="1" placeholder="35"></label><label>Carbs (g)<input id="mealCarbs" type="number" min="0" step="1" placeholder="60"></label><label>Fat (g)<input id="mealFat" type="number" min="0" step="1" placeholder="18"></label><label>Water (glasses)<input id="mealWater" type="number" min="0" step="1" placeholder="1"></label><label class="full">What did you eat?<textarea id="mealFood" rows="3" placeholder="Rice, chicken, vegetables..."></textarea></label></div><div class="modal-actions"><button type="button" class="ghost-btn" data-close>Cancel</button><button class="primary-btn">Save meal</button></div></form></dialog>
 
   <dialog id="progressModal"><form method="dialog" id="progressForm" class="modal-form"><div class="modal-head"><h3>Weigh-in</h3><button type="button" class="icon-btn" data-close>×</button></div><div class="form-grid"><label>Date<input id="progressDate" type="date" required></label><label>Weight (kg)<input id="progressWeight" type="number" min="20" max="300" step="0.1" required></label><label class="full">Note<textarea id="progressNote" rows="2" placeholder="Morning, before breakfast..."></textarea></label></div><div class="modal-actions"><button type="button" class="ghost-btn" data-close>Cancel</button><button class="primary-btn">Save weigh-in</button></div></form></dialog>
 
